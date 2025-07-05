@@ -284,6 +284,20 @@ if command -v fvm &>/dev/null; then
 fi
 
 # Get FVM version (latest if not specified)
+FVM_VERSION_FILE="$(dirname "$0")/fvm_version.txt"
+if [[ -f "$FVM_VERSION_FILE" ]]; then
+    FVM_VERSION=$(cat "$FVM_VERSION_FILE" | tr -d '\n')
+    if [[ -n "$FVM_VERSION" ]]; then
+        info "Using FVM version from $FVM_VERSION_FILE: $FVM_VERSION"
+    else
+        read -p "请输入 FVM 版本号（留空将获取最新版本）: " FVM_VERSION
+        if [[ -n "$FVM_VERSION" ]]; then
+            echo "$FVM_VERSION" > "$FVM_VERSION_FILE"
+            info "FVM 版本号已保存到 $FVM_VERSION_FILE" 
+        fi
+    fi
+fi
+
 if [[ -z "$FVM_VERSION" ]]; then
   info "Getting latest FVM version..."
   
